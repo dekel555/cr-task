@@ -1,11 +1,16 @@
 #!/bin/bash
 
-docker-compose up -d
-
 python3 ./DataToJson.py
 
-mongoimport --db cr-db --collection users --file users.json --jsonArray
 
-mongoexport --db cr-db -c users --out exData.json --forceTableScan
+docker-compose up -d
+
+docker exec -i mongodb sh -c 'mongoimport -c <users> -d <cr-db> --drop' < ./users.json
+
+docker exec mongodb sh -c 'mongoimport --db cr-db --collection users --drop --file /users.json --jsonArray'
+
+docker exec mongodb sh -c 'mongoexport --db cr-db -c users --out exData.json --forceTableScan'
+
+docker cp mongodb:/exData.json .
 
 python3 ./app.py
