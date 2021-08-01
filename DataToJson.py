@@ -1,49 +1,29 @@
 import json
-import pandas as pd
 
 
-def delID(data):
-    for user in data:
-        del user['_id']
-
-def cap(data):
-    for user in data:
-        user['firstname'] = user['firstname'].capitalize()
-        user['lastname'] = user['lastname'].capitalize()
-
-def hidePass(data):
-    for user in data:
-        user['password'] = '*' * len(user['password'])
-
-def manipulateData():
-
-    with open ("exData.json",'r') as f:
-
-        usersData = [json.loads(line) for line in f]
-        
-        # remove the object ID field 
-        delID(usersData)
-        
-        # capitalize firstname and lastname fields
-        cap(usersData)
-        
-        # hiding plaintext passwords
-        hidePass(usersData)
-        
-        # sorting data by firstname field
-        usersData = sorted(usersData, key = lambda k: k['firstname'])
-
-        return usersData
-
-def saveToHtmlPage(data):
-    df = pd.DataFrame(data)
-    df.to_html('index.html')
-
+# Converting the 'data.txt' file to json file for the mongoimport command
 
 def main():
-    data = manipulateData()
-    saveToHtmlPage(data)
-
+    filename = 'data.txt'
+    
+    users = []
+    
+    with open(filename) as f:
+        for line in f:
+            fields = list(line.split(', ', 4))
+            i = 0
+            dict1 = {}
+            while i<4:
+                value = fields[i].strip().split(": ")
+                dict1[value[0]]= value[1]
+                i = i + 1
+                    
+            users.append(dict1)
+    
+          
+    with open("users.json", 'w+') as out_file:
+        json.dump(users, out_file, indent = '\t')
+        
 
 
 if __name__ == "__main__":
