@@ -1,12 +1,15 @@
 import json
 
+
+# Converting the 'data.txt' file to json file for the mongoimport command
+
 def main():
     filename = 'data.txt'
     
     users = []
     
-    with open(filename) as fh:
-        for line in fh:
+    with open(filename) as f:
+        for line in f:
             fields = list(line.split(', ', 4))
             i = 0
             dict1 = {}
