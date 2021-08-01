@@ -16,13 +16,23 @@ def hidePass(data):
         user['password'] = '*' * len(user['password'])
 
 def manipulateData():
+
     with open ("exData.json",'r') as f:
+
         usersData = [json.loads(line) for line in f]
+        
+        # remove the object ID field 
         delID(usersData)
+        
+        # capitalize firstname and lastname fields
         cap(usersData)
+        
+        # hiding plaintext passwords
         hidePass(usersData)
+        
+        # sorting data by firstname field
         usersData = sorted(usersData, key = lambda k: k['firstname'])
-        print("data: ", usersData)
+
         return usersData
 
 def saveToHtmlPage(data):
