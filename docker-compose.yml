@@ -3,9 +3,12 @@ services:
     mongodb:
         container_name: mongodb
         image: mongo:4.0.4
+        volumes:
+            - "./users.json:/users.json"
         ports: 
             - "27017:27017"
         restart: always
+
 
     nginx:
         container_name: nginx
